@@ -16,9 +16,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Kata5P1 {
-
+    
     private Connection connect() {
-
+        
         String url = "jdbc:sqlite:KATA5.db";
         Connection conn = null;
         try {
@@ -28,13 +28,13 @@ public class Kata5P1 {
         }
         return conn;
     }
-
+    
     public void selectAll(){
         String sql = "SELECT * FROM PEOPLE";
         try (Connection conn = this.connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)){
-
+            
             while (rs.next()) {
                 System.out.println(rs.getInt("Id") + "\t" +
                                 rs.getString("Name") + "\t" +
@@ -47,8 +47,23 @@ public class Kata5P1 {
             System.out.println(e.getMessage());
         }
     }
+    
+    public void createTable() {
+        
+        String query = "CREATE TABLE IF NOT EXISTS EMAIL (ID INTEGER PRIMARY KEY AUTOINCREMENT,MAIL TEXT NOT NULL);";
+        
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public static void main(String[] args) {
         Kata5P1 app = new Kata5P1();
-        app.selectAll();
+        app.createTable();
     }
-} 
+}
