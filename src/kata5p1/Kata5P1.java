@@ -9,12 +9,14 @@ package kata5p1;
  *
  * @author danie
  */
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.List;
 public class Kata5P1 {
     
     private Connection connect() {
@@ -62,8 +64,26 @@ public class Kata5P1 {
         }
     }
     
+    public void fillTable(){
+        String path = "C:\\Users\\danie\\Documents\\NetBeansProjects\\Kata5P1\\email.txt";
+        List<String> emails = MailListReader.read(path);
+        try {
+            String insert = "INSERT INTO EMAIL(Mail) VALUES(?)";
+            Connection conn = this.connect();
+            PreparedStatement pstmt= conn.prepareStatement(insert);
+            for (String email : emails) {
+                pstmt.setString(1, email);
+                pstmt.executeUpdate();
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public static void main(String[] args) {
+        
         Kata5P1 app = new Kata5P1();
-        app.createTable();
+        app.fillTable();
     }
 }
